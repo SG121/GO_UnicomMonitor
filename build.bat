@@ -1,8 +1,8 @@
 @echo off
 setlocal
 
-echo build start
 echo by zgcwkj
+echo build start
 
 rem config
 set outPath=../build/unicomMonitor

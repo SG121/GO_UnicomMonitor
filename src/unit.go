@@ -63,7 +63,7 @@ func SaveData() {
 		fileName := fmt.Sprintf("%d_video.flv", GetNowTime())
 		file, err := os.OpenFile(fileName, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
 		if err != nil {
-			FmtPrint("Failed to save voice data: %v", err)
+			FmtPrint("Failed to save voice data: ", err)
 			return
 		}
 		defer file.Close()
@@ -78,7 +78,7 @@ func SaveVoice() {
 		fileName := fmt.Sprintf("%d_voice.flv", GetNowTime())
 		file, err := os.OpenFile(fileName, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
 		if err != nil {
-			FmtPrint("Failed to save voice data: %v", err)
+			FmtPrint("Failed to save voice data: ", err)
 			return
 		}
 		defer file.Close()
