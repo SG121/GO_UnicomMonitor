@@ -10,8 +10,15 @@
 
 ## 说明
 
-从 [Releases](/releases) 下载**二进制程序**和**config.json**文件
+1. 从 [Releases](https://github.com/zgcwkjOpenProject/GO_UnicomMonitor/releases) 下载 **二进制程序** 和 **config.json** 文件
+2. 修改配置文件 **config.json**，具体参考 [妖友源码说明](back)。
+3. 启动程序，会立刻抓取数据。
+4. 视频文件缺少文件头，可以用 ffmpeg 转换或补上缺少文件头。
 
-修改配置文件**config.json**，然后启动即可抓取数据。
+## 开发
 
-视频文件缺少文件头，可以用ffmpeg转换或补上缺少文件头。
+- [√] 摄像头录像
+- [x] 摄像头录音
+- [x] 补上缺少的视频文件头，使文件可以直接播放
+- [x] 设置摄像头录下存储上限
+- [x] 支持多个摄像头录像
