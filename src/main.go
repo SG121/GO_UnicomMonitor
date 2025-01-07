@@ -1,50 +1,11 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net/url"
-	"os"
 
 	"github.com/gorilla/websocket"
 )
-
-// 全局变量
-var (
-	globalVar   []byte
-	globalVoice []byte
-	config      Config
-)
-
-// 保存数据
-func saveData() {
-	if len(globalVar) > 1024*config.Size {
-		fileName := fmt.Sprintf("%d_video.flv", GetNowTime())
-		file, err := os.OpenFile(fileName, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
-		if err != nil {
-			FmtPrint("Failed to save voice data: %v", err)
-			return
-		}
-		defer file.Close()
-		file.Write(globalVar)
-		globalVar = []byte{}
-	}
-}
-
-// 保存声音
-func saveVoice() {
-	if len(globalVoice) > 1024*config.Size {
-		fileName := fmt.Sprintf("%d_voice.flv", GetNowTime())
-		file, err := os.OpenFile(fileName, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
-		if err != nil {
-			FmtPrint("Failed to save voice data: %v", err)
-			return
-		}
-		defer file.Close()
-		file.Write(globalVoice)
-		globalVoice = []byte{}
-	}
-}
 
 // 发送消息
 func sendMessage(wsHost string, paramMsg string) {
@@ -56,35 +17,35 @@ func sendMessage(wsHost string, paramMsg string) {
 	}
 	conn, _, err := websocket.DefaultDialer.Dial(uri.String(), nil)
 	if err != nil {
-		log.Fatalf("Failed to connect to WebSocket server: %v", err)
+		log.Fatalf("无法连接到 WebSocket 服务器：%v", err)
 	}
 	defer conn.Close()
 	// 发送消息
 	message := "_paramStr_=" + paramMsg
 	err = conn.WriteMessage(websocket.TextMessage, []byte(message))
 	if err != nil {
-		FmtPrint("Failed to send message: %v", err)
+		FmtPrint("发送消息失败：%v", err)
 		return
 	}
 	// 接收消息
 	_, response, err := conn.ReadMessage()
 	if err != nil {
-		FmtPrint("Failed to receive response: %v", err)
+		FmtPrint("接收消息失败：%v", err)
 		return
 	}
-	FmtPrint("Received response:", Decode(string(response)))
+	FmtPrint("收到的回复：", Decode(string(response)))
 	// 发送消息
 	cmdMessage := `{"time":1243,"cmd":3}`
 	err = conn.WriteMessage(websocket.TextMessage, []byte(cmdMessage))
 	if err != nil {
-		FmtPrint("Failed to send command: %v", err)
+		FmtPrint("发送命令失败：%v", err)
 		return
 	}
 	// 继续接收消息并处理数据
 	for {
 		_, response, err := conn.ReadMessage()
 		if err != nil {
-			FmtPrint("Error receiving message: %v", err)
+			FmtPrint("接收消息失败：%v", err)
 			break
 		}
 		// 检查特定条件
@@ -92,9 +53,9 @@ func sendMessage(wsHost string, paramMsg string) {
 			// 将数据附加到全局变量
 			globalVar = append(globalVar, response[0x4e:]...)
 			// 打印数据的长度
-			FmtPrint("Data length:", len(globalVar))
+			// FmtPrint("数据长度：", len(globalVar))
 			// 保存数据
-			saveData()
+			SaveData()
 		}
 	}
 }
@@ -102,11 +63,10 @@ func sendMessage(wsHost string, paramMsg string) {
 // 主函数
 func main() {
 	FmtPrint("开始启动")
-	// https://we.wo.cn/web/smart-club-pc-v2/?clientId=1001000001
 	// 读取配置文件
 	config, err := ReadConfig()
 	if err != nil {
-		FmtPrint("读取配置文件出错:", err)
+		FmtPrint("读取配置文件出错：", err)
 		return
 	}
 	// 发送消息
@@ -114,5 +74,5 @@ func main() {
 	paramMsg := config.ParamMsg
 	sendMessage(wsHost, paramMsg)
 	//
-	FmtPrint("启动完成")
+	FmtPrint("已退出")
 }

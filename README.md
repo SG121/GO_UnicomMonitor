@@ -2,11 +2,7 @@
 
 ## 来源
 
-> py 源码是妖友的（妖火论坛）。本人转换成 golang 更方便使用
-
-源码：[unicomMonitor.py](back/unicomMonitor.py)
-
-帖子：![unicomMonitor.png](back/unicomMonitor.png)
+[py 源码](back)是妖友的（妖火论坛）。本人转换成 golang 更方便使用
 
 ## 入口
 
@@ -14,6 +10,8 @@
 
 ## 说明
 
+从 [Releases](/releases) 下载**二进制程序**和**config.json**文件
+
 修改配置文件**config.json**，然后启动即可抓取数据。
 
-视频文件缺少文件头，可以用ffmpeg转换或补上缺少文件头
+视频文件缺少文件头，可以用ffmpeg转换或补上缺少文件头。
